@@ -24,7 +24,7 @@ flutter pub get
 ```dart
 import 'package:wsocket_io/wsocket_io.dart';
 
-final client = WSocket('wss://your-server.com', 'your-api-key');
+final client = WSocket('wss://node00.wsocket.online', 'your-api-key');
 
 client.onConnect(() {
   print('Connected!');
@@ -77,7 +77,7 @@ channel.onHistory((result) {
 
 ```dart
 final push = PushClient(
-  baseUrl: 'https://your-server.com',
+  baseUrl: 'https://node00.wsocket.online',
   token: 'secret',
   appId: 'app1',
 );
