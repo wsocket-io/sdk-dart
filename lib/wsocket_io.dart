@@ -252,6 +252,14 @@ class PushClient {
     );
   }
 
+  Future<bool> deleteSubscription(String subscriptionId) async {
+    final resp = await http.delete(
+      Uri.parse('$baseUrl/api/push/subscriptions/$subscriptionId'),
+      headers: {'Authorization': 'Bearer $token', 'X-App-Id': appId, 'Content-Type': 'application/json'},
+    );
+    return resp.statusCode == 200;
+  }
+
   Future<void> _post(String path, Map<String, dynamic> body) async {
     await http.post(
       Uri.parse('$baseUrl/api/push/$path'),
