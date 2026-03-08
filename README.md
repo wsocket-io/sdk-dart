@@ -93,6 +93,16 @@ push.sendToMember('user-123', payload: {
 
 // Broadcast
 push.broadcast(payload: {'title': 'Announcement', 'body': 'Server update'});
+
+// Channel targeting
+await push.addChannel('subscription-id', 'alerts');
+await push.removeChannel('subscription-id', 'alerts');
+
+// VAPID key
+final vapidKey = await push.getVapidKey();
+
+// List subscriptions
+final subs = await push.listSubscriptions('user-123');
 ```
 
 ## Requirements
