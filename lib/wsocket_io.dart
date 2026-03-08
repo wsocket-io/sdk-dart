@@ -260,6 +260,47 @@ class PushClient {
     return resp.statusCode == 200;
   }
 
+  Future<Map<String, dynamic>> addChannel(String memberId, String channel) async {
+    final resp = await http.post(
+      Uri.parse('$baseUrl/api/push/channels/add'),
+      headers: {'Authorization': 'Bearer $token', 'X-App-Id': appId, 'Content-Type': 'application/json'},
+      body: jsonEncode({'memberId': memberId, 'channel': channel}),
+    );
+    return jsonDecode(resp.body);
+  }
+
+  Future<Map<String, dynamic>> removeChannel(String memberId, String channel) async {
+    final resp = await http.post(
+      Uri.parse('$baseUrl/api/push/channels/remove'),
+      headers: {'Authorization': 'Bearer $token', 'X-App-Id': appId, 'Content-Type': 'application/json'},
+      body: jsonEncode({'memberId': memberId, 'channel': channel}),
+    );
+    return jsonDecode(resp.body);
+  }
+
+  Future<String?> getVapidKey() async {
+    final qs = appId.isNotEmpty ? '?appId=$appId' : '';
+    final resp = await http.get(
+      Uri.parse('$baseUrl/api/push/vapid-key$qs'),
+      headers: {'Authorization': 'Bearer $token', 'X-App-Id': appId},
+    );
+    final data = jsonDecode(resp.body);
+    return data['vapidPublicKey'] as String?;
+  }
+
+  Future<Map<String, dynamic>> listSubscriptions({String? memberId, String? platform, int? limit}) async {
+    final params = <String>[];
+    if (memberId != null) params.add('memberId=$memberId');
+    if (platform != null) params.add('platform=$platform');
+    if (limit != null) params.add('limit=$limit');
+    final qs = params.isNotEmpty ? '?${params.join('&')}' : '';
+    final resp = await http.get(
+      Uri.parse('$baseUrl/api/push/subscriptions$qs'),
+      headers: {'Authorization': 'Bearer $token', 'X-App-Id': appId},
+    );
+    return jsonDecode(resp.body);
+  }
+
   Future<void> _post(String path, Map<String, dynamic> body) async {
     await http.post(
       Uri.parse('$baseUrl/api/push/$path'),
